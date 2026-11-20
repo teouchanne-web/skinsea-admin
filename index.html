@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="ka">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SKINSEA • Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #438ba3;
+        --ink: #243c45;
+        --bg: #f5f9f9;
+        --line: #dfebed;
+        --soft: #e9f5f8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "DM Sans", Arial, sans-serif;
+      }
+      main {
+        max-width: 1100px;
+        margin: auto;
+        padding: 24px 18px 70px;
+      }
+      header {
+        background: white;
+        border-bottom: 1px solid var(--line);
+      }
+      .head {
+        max-width: 1100px;
+        margin: auto;
+        padding: 17px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo {
+        font-size: 23px;
+        letter-spacing: 2px;
+        font-weight: 600;
+      }
+      .logo small {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 3px;
+        color: var(--blue);
+      }
+      h1 {
+        font-size: 27px;
+        margin: 0 0 5px;
+      }
+      h2 {
+        font-size: 19px;
+        margin: 0 0 15px;
+      }
+      p.muted,
+      .muted {
+        color: #748b91;
+      }
+      .muted {
+        font-size: 13px;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 16px;
+        cursor: pointer;
+        font-weight: 600;
+        background: var(--ink);
+        color: white;
+      }
+      button.secondary {
+        background: var(--soft);
+        color: var(--ink);
+      }
+      button.outline {
+        background: white;
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      .card {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 20px;
+        margin: 16px 0;
+        box-shadow: 0 8px 24px #2b657008;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .stat {
+        padding: 18px;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+      }
+      .stat strong {
+        font-size: 24px;
+        display: block;
+      }
+      .stat span {
+        font-size: 12px;
+        color: #70848a;
+      }
+      .formgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid #d7e5e8;
+        border-radius: 11px;
+        padding: 12px;
+        background: white;
+        color: var(--ink);
+      }
+      textarea {
+        min-height: 85px;
+        resize: vertical;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .toolbar input {
+        flex: 2;
+        min-width: 190px;
+      }
+      .toolbar select {
+        flex: 1;
+        min-width: 160px;
+      }
+      .order {
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 16px;
+        margin: 12px 0;
+      }
+      .order h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .order p {
+        margin: 8px 0;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .pill {
+        background: #fff3d7;
+        color: #8c6619;
+        border-radius: 30px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .pill.done {
+        background: #e6f5e9;
+        color: #31714c;
+      }
+      .pill.cancel {
+        background: #fde8e8;
+        color: #a34141;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 13px;
+      }
+      .actions select {
+        width: auto;
+        min-width: 150px;
+        flex: 1;
+      }
+      .hide {
+        display: none !important;
+      }
+      #notice {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 11px;
+        border-radius: 12px;
+        background: #e7f3fa;
+        color: #25576a;
+        margin: 12px 0;
+      }
+      #notice:empty {
+        display: none;
+      }
+      .empty {
+        text-align: center;
+        padding: 36px;
+        color: #71868b;
+      }
+      a {
+        color: var(--blue);
+      }
+      @media (max-width: 620px) {
+        #editProductRows .product-entry,
+        #productRows .product-entry {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+        }
+        #editProductRows .item-name,
+        #productRows .item-name {
+          min-width: 0;
+        }
+
+        .product-entry {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+        }
+        .product-entry > div:first-child {
+          grid-column: 1/-1;
+        }
+        .grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 7px;
+        }
+        .stat {
+          padding: 11px;
+        }
+        .stat strong {
+          font-size: 19px;
+        }
+        .stat span {
+          font-size: 10px;
+        }
+        .formgrid {
+          grid-template-columns: 1fr;
+        }
+        .full {
+          grid-column: auto;
+        }
+        .card {
+          padding: 15px;
+        }
+        h1 {
+          font-size: 23px;
+        }
+        .head {
+          padding: 14px;
+        }
+        .logo {
+          font-size: 20px;
+        }
+        button {
+          padding: 10px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="head">
+        <div class="logo">skinsea <small>ADMIN PANEL</small></div>
+        <button id="logout" class="secondary hide">გასვლა</button>
+      </div>
+    </header>
+    <main>
+      <div id="notice" role="status"></div>
+      <section
+        id="login"
+        class="card"
+        style="max-width: 440px; margin: 65px auto"
+      >
+        <h1>ადმინისტრატორის შესვლა 🩵</h1>
+        <p class="muted">შედი SKINSEA-ს ადმინისტრატორის ანგარიშით.</p>
+        <form id="loginForm">
+          <div style="margin: 16px 0">
+            <label for="email">ელფოსტა</label
+            ><input id="email" type="email" autocomplete="username" required />
+          </div>
+          <button
+            type="submit"
+            id="loginBtn"
+            style="width: 100%; margin-top: 16px"
+          >
+            გამომიგზავნე შესვლის ბმული ✉️
+          </button>
+          <p class="muted" style="margin-top: 12px">
+            პაროლი არ გჭირდება. ბმული გაიხსნება ამავე კომპიუტერზე.
+          </p>
+        </form>
+      </section>
+      <section id="dashboard" class="hide">
+        <div class="row">
+          <div>
+            <h1>შეკვეთების მართვა</h1>
+            <p class="muted">SKINSEA • ონლაინ და Messenger შეკვეთები</p>
+          </div>
+          <button id="toggleNew">➕ ახალი შეკვეთა</button>
+        </div>
+        <div class="grid">
+          <div class="stat">
+            <strong id="countAll">0</strong><span>სულ შეკვეთები</span>
+          </div>
+          <div class="stat">
+            <strong id="countOpen">0</strong><span>მუშავდება</span>
+          </div>
+          <div class="stat">
+            <strong id="sumAll">0 ₾</strong><span>ჯამი*</span>
+          </div>
+        </div>
+        <p class="muted">
+          *ჯამი მოიცავს პროდუქციასა და მიწოდებას; ეს არ არის დადასტურებული
+          შემოსავალი.
+        </p>
+        <section id="newSection" class="card hide">
+          <div class="row">
+            <h2>ახალი შეკვეთის დამატება</h2>
+            <button type="button" id="closeNew" class="outline">დახურვა</button>
+          </div>
+          <form id="orderForm" class="formgrid">
+            <div>
+              <label>მომხმარებლის სახელი *</label
+              ><input name="customer_name" required maxlength="150" />
+            </div>
+            <div>
+              <label>ტელეფონი *</label
+              ><input name="phone" type="tel" required maxlength="40" />
+            </div>
+            <div class="full">
+              <label>მისამართი *</label
+              ><input name="address" required maxlength="500" />
+            </div>
+            <div class="full">
+              <label>პროდუქტები, ერთეულის ფასი და რაოდენობა *</label>
+              <div id="productRows"></div>
+              <button
+                type="button"
+                id="addProduct"
+                class="secondary"
+                style="margin-top: 10px"
+              >
+                + კიდევ ერთი პროდუქტი
+              </button>
+            </div>
+            <div>
+              <label>პროდუქციის ჯამი, ₾</label>
+              <input id="productTotal" readonly value="0.00 ₾" />
+            </div>
+            <div>
+              <label>კურიერის თანხა, ₾ *</label>
+              <input
+                id="deliveryFee"
+                name="delivery_fee"
+                type="number"
+                min="0"
+                step="0.01"
+                value="0"
+                required
+              />
+            </div>
+            <div class="full">
+              <label>მომხმარებლის გადასახდელი, ₾</label>
+              <input id="orderGrandTotal" readonly value="0.00 ₾" />
+            </div>
+            <div class="full">
+              <label>შენიშვნა / მიწოდება / გადახდის შეთანხმება</label
+              ><textarea
+                name="comment"
+                placeholder="მაგ.: Messenger შეკვეთა; MyWay; თანხის მიღება ადგილზე"
+              ></textarea>
+            </div>
+            <div class="full">
+              <button id="saveBtn" type="submit">💾 შეკვეთის შენახვა</button>
+              <span class="muted">ხელით დამატება მარაგს არ ცვლის.</span>
+            </div>
+          </form>
+        </section>
+        <section id="editSection" class="card hide">
+          <div class="row">
+            <h2 id="editTitle">შეკვეთის რედაქტირება</h2>
+            <button type="button" id="closeEdit" class="outline">
+              დახურვა
+            </button>
+          </div>
+          <form id="editForm" class="formgrid">
+            <input type="hidden" name="order_id" />
+            <div>
+              <label>მომხმარებლის სახელი *</label
+              ><input name="customer_name" required maxlength="150" />
+            </div>
+            <div>
+              <label>ტელეფონი *</label
+              ><input name="phone" type="tel" required maxlength="40" />
+            </div>
+            <div class="full">
+              <label>მისამართი *</label
+              ><input name="address" required maxlength="500" />
+            </div>
+            <div class="full">
+              <label>პროდუქტები, ერთეულის ფასი და რაოდენობა *</label>
+              <div id="editProductRows"></div>
+              <button
+                type="button"
+                id="editAddProduct"
+                class="secondary"
+                style="margin-top: 10px"
+              >
+                + კიდევ ერთი პროდუქტი
+              </button>
+              <p id="legacyPriceNote" class="muted hide">
+                ამ შეკვეთაში პროდუქტების ფასები ცალ-ცალკე არ იყო შენახული.
+                შენახვამდე შეავსე ერთეულის ფასები და კურიერის თანხა.
+              </p>
+            </div>
+            <div>
+              <label>პროდუქციის ჯამი, ₾</label
+              ><input id="editProductTotal" readonly value="0.00 ₾" />
+            </div>
+            <div>
+              <label>კურიერის თანხა, ₾ *</label
+              ><input
+                id="editDeliveryFee"
+                name="delivery_fee"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+            <div class="full">
+              <label>სულ გადასახდელი, ₾</label
+              ><input id="editGrandTotal" readonly value="0.00 ₾" />
+            </div>
+            <div class="full">
+              <label>შენიშვნა</label><textarea name="comment"></textarea>
+            </div>
+            <div class="full">
+              <button type="submit" id="editSaveBtn">
+                ცვლილებების შენახვა
+              </button>
+              <button type="button" id="cancelEdit" class="outline">
+                გაუქმება
+              </button>
+              <p class="muted">
+                რედაქტირება მარაგს არ ცვლის. შენახვისას მონაცემები განახლდება
+                Supabase-ში.
+              </p>
+            </div>
+          </form>
+        </section>
+        <section class="card">
+          <div class="row">
+            <h2>შეკვეთები</h2>
+            <button id="refresh" class="secondary">🔄 განახლება</button>
+          </div>
+          <div class="toolbar">
+            <input
+              id="search"
+              placeholder="ძიება: სახელი, ნომერი, ტელეფონი..."
+            /><select id="filter">
+              <option value="all">ყველა სტატუსი</option>
+              <option value="processing">მუშავდება</option>
+              <option value="confirmed">დადასტურებული</option>
+              <option value="shipped">გაგზავნილი</option>
+              <option value="delivered">მიწოდებული</option>
+              <option value="cancelled">გაუქმებული</option>
+            </select>
+          </div>
+          <div id="orders"><div class="empty">იტვირთება...</div></div>
+        </section>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      "use strict";
+      const SUPABASE_URL = "https://kjyqqpybrswcfbyztxcv.supabase.co";
+      const KEY = "sb_publishable_SlW6I1RqObjbd24gpW1WXg_mFY1laA-";
+      const ADMIN_ID = "72f94f55-024a-40b7-a272-d4f4f4a39a6c";
+      const db = window.supabase.createClient(SUPABASE_URL, KEY);
+      const $ = (id) => document.getElementById(id);
+      const statusLabels = {
+        processing: "მუშავდება",
+        confirmed: "დადასტურებული",
+        shipped: "გაგზავნილი",
+        delivered: "მიწოდებული",
+        cancelled: "გაუქმებული",
+      };
+      let orders = [];
+      function notify(message) {
+        $("notice").textContent = message;
+      }
+      function money(v) {
+        return (
+          Number(v || 0).toLocaleString("ka-GE", { maximumFractionDigits: 2 }) +
+          " ₾"
+        );
+      }
+      function safe(s) {
+        return String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+      function breakdown(row) {
+        try {
+          const a =
+            typeof row.items === "string" ? JSON.parse(row.items) : row.items;
+          const item =
+            Array.isArray(a) &&
+            a.find(
+              (x) =>
+                x &&
+                typeof x === "object" &&
+                x.skinsea_admin_breakdown === true,
+            );
+          if (
+            item &&
+            Number.isFinite(Number(item.product_total)) &&
+            Number.isFinite(Number(item.delivery_fee))
+          ) {
+            return {
+              product: Number(item.product_total),
+              delivery: Number(item.delivery_fee),
+            };
+          }
+        } catch {}
+        return null; // ძველი შეკვეთების თანხებს არ ვყოფთ ვარაუდით
+      }
+      function addProductRow() {
+        const div = document.createElement("div");
+        div.className = "product-entry";
+        div.style.cssText =
+          "display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) 80px auto;gap:8px;align-items:end;margin:9px 0;padding:12px;background:#f5f9f9;border-radius:12px";
+        div.innerHTML = `<div><label>პროდუქტი *</label><input class="item-name" maxlength="250" placeholder="მაგ.: Medicube PDRN Cream" required /></div><div><label>ერთეულის ფასი ₾ *</label><input class="item-price" type="number" min="0" step="0.01" required placeholder="95" /></div><div><label>რაოდენობა *</label><input class="item-qty" type="number" min="1" step="1" value="1" required /></div><button type="button" class="outline remove-product" title="წაშლა">✕</button><div class="line-total" style="grid-column:1/-1;text-align:right;font-size:12px;color:#438ba3">ჯამი: 0.00 ₾</div>`;
+        div.querySelector(".remove-product").onclick = () => {
+          if ($("productRows").querySelectorAll(".product-entry").length <= 1)
+            return;
+          div.remove();
+          updateGrandTotal();
+        };
+        div
+          .querySelectorAll("input")
+          .forEach((input) =>
+            input.addEventListener("input", updateGrandTotal),
+          );
+        $("productRows").appendChild(div);
+        updateGrandTotal();
+      }
+      function collectProducts() {
+        return [...$("productRows").querySelectorAll(".product-entry")].map(
+          (div) => ({
+            name: div.querySelector(".item-name").value.trim(),
+            unit_price: Number(div.querySelector(".item-price").value),
+            quantity: Number(div.querySelector(".item-qty").value),
+          }),
+        );
+      }
+      function updateGrandTotal() {
+        let cents = 0;
+        $("productRows")
+          .querySelectorAll(".product-entry")
+          .forEach((div) => {
+            const price = Number(div.querySelector(".item-price").value || 0);
+            const qty = Number(div.querySelector(".item-qty").value || 0);
+            const line = Math.round(price * qty * 100);
+            cents += line;
+            div.querySelector(".line-total").textContent =
+              "ჯამი: " + (line / 100).toFixed(2) + " ₾";
+          });
+        const feeCents = Math.round(Number($("deliveryFee").value || 0) * 100);
+        $("productTotal").value = (cents / 100).toFixed(2) + " ₾";
+        $("orderGrandTotal").value =
+          ((cents + feeCents) / 100).toFixed(2) + " ₾";
+      }
+      $("addProduct").onclick = addProductRow;
+      $("deliveryFee").addEventListener("input", updateGrandTotal);
+      addProductRow();
+      function getItems(row) {
+        try {
+          const a =
+            typeof row.items === "string"
+              ? JSON.parse(row.items || "[]")
+              : row.items;
+          if (Array.isArray(a))
+            return a
+              .filter(
+                (x) =>
+                  !(
+                    x &&
+                    typeof x === "object" &&
+                    x.skinsea_admin_breakdown === true
+                  ),
+              )
+              .map((x) =>
+                typeof x === "string"
+                  ? x
+                  : [x.brand, x.name].filter(Boolean).join(" ") +
+                    " × " +
+                    (x.quantity ?? 1) +
+                    (Number.isFinite(Number(x.unit_price)) &&
+                    x.unit_price != null
+                      ? " · " + money(x.unit_price) + "/ც"
+                      : ""),
+              )
+              .join("; ");
+        } catch {}
+        return row.items || "—";
+      }
+      async function checkAuth() {
+        const { data, error } = await db.auth.getUser();
+        const ok = !error && data?.user?.id === ADMIN_ID;
+        $("login").classList.toggle("hide", ok);
+        $("dashboard").classList.toggle("hide", !ok);
+        $("logout").classList.toggle("hide", !ok);
+        if (ok) {
+          await loadOrders();
+        } else {
+          orders = [];
+          if (data?.user) notify("ამ ანგარიშს ადმინისტრატორის წვდომა არ აქვს.");
+        }
+      }
+      $("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        notify("");
+        const email = $("email").value.trim();
+        if (location.protocol === "file:") {
+          notify("ჯერ VS Code-ში Open with Live Server-ით გახსენი ეს ფაილი.");
+          return;
+        }
+        if (email.toLowerCase() !== "teouchanne@gmail.com") {
+          notify("გამოიყენე ადმინისტრატორის ელფოსტა.");
+          return;
+        }
+        const btn = $("loginBtn");
+        btn.disabled = true;
+        const { error } = await db.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: location.origin + location.pathname,
+            shouldCreateUser: false,
+          },
+        });
+        btn.disabled = false;
+        notify(
+          error
+            ? "ბმული ვერ გაიგზავნა: " + error.message
+            : "📩 შესვლის ბმული გაიგზავნა! შეამოწმე ელფოსტა და გახსენი ბმული ამავე ბრაუზერში.",
+        );
+      });
+      $("logout").onclick = async () => {
+        await db.auth.signOut();
+        notify("სესიიდან გამოხვედი.");
+        await checkAuth();
+      };
+      async function loadOrders() {
+        notify("");
+        const { data, error } = await db
+          .from("Orders")
+          .select(
+            "id,created_at,customer_name,phone,address,items,total,customer_email,comment,status",
+          )
+          .order("created_at", { ascending: false })
+          .limit(500);
+        if (error) {
+          notify("შეკვეთები ვერ ჩაიტვირთა: " + error.message);
+          return;
+        }
+        orders = data || [];
+        render();
+      }
+      function render() {
+        const q = $("search").value.trim().toLowerCase(),
+          f = $("filter").value;
+        $("countAll").textContent = orders.length;
+        $("countOpen").textContent = orders.filter(
+          (x) => x.status === "processing",
+        ).length;
+        $("sumAll").textContent = money(
+          orders.reduce((s, x) => s + Number(x.total || 0), 0),
+        );
+        const list = orders.filter(
+          (x) =>
+            (f === "all" || x.status === f) &&
+            [x.id, x.customer_name, x.phone, x.address, getItems(x)]
+              .join(" ")
+              .toLowerCase()
+              .includes(q),
+        );
+        $("orders").innerHTML = list.length
+          ? list
+              .map((o) => {
+                const date = o.created_at
+                  ? new Date(o.created_at).toLocaleString("ka-GE")
+                  : "";
+                const st = o.status || "processing";
+                const opts = Object.entries(statusLabels)
+                  .map(
+                    ([k, v]) =>
+                      `<option value="${k}" ${k === st ? "selected" : ""}>${v}</option>`,
+                  )
+                  .join("");
+                const bd = breakdown(o);
+                const priceHtml = bd
+                  ? `<br><b>პროდუქცია:</b> ${safe(money(bd.product))}<br><b>კურიერი:</b> ${safe(money(bd.delivery))}`
+                  : `<br><span class="muted">პროდუქციისა და კურიერის თანხები ცალ-ცალკე არ არის შენახული</span>`;
+                return `<article class="order"><div class="row"><h3>#${safe(o.id)} · ${safe(o.customer_name || "უსახელო")}</h3><span class="pill ${st === "delivered" ? "done" : st === "cancelled" ? "cancel" : ""}">${safe(statusLabels[st] || st)}</span></div><p class="muted">${safe(date)}</p><p><b>ტელ:</b> ${safe(o.phone || "—")}<br><b>მისამართი:</b> ${safe(o.address || "—")}<br><b>პროდუქტები:</b> ${safe(getItems(o))}${priceHtml}<br><b>სულ გადასახდელი:</b> ${safe(money(o.total))}${o.comment ? "<br><b>შენიშვნა:</b> " + safe(o.comment) : ""}</p><div class="actions"><select aria-label="შეკვეთის სტატუსი" data-status="${o.id}">${opts}</select><button data-save="${o.id}" class="secondary">💾 სტატუსის შენახვა</button><button data-edit="${o.id}" class="outline">✏️ რედაქტირება</button><button data-delete="${o.id}" class="outline" style="color:#a34141;border-color:#f0cccc">🗑️ წაშლა</button><button data-copy="${o.id}" class="outline">📋 ტექსტის კოპირება</button></div></article>`;
+              })
+              .join("")
+          : '<div class="empty">შეკვეთები ვერ მოიძებნა.</div>';
+      }
+      $("search").oninput = render;
+      $("filter").onchange = render;
+      $("refresh").onclick = loadOrders;
+      $("toggleNew").onclick = () => {
+        $("newSection").classList.toggle("hide");
+      };
+      $("closeNew").onclick = () => $("newSection").classList.add("hide");
+      $("orders").addEventListener("click", async (e) => {
+        const save = e.target.closest("[data-save]"),
+          copy = e.target.closest("[data-copy]"),
+          edit = e.target.closest("[data-edit]"),
+          del = e.target.closest("[data-delete]");
+        if (del) {
+          const id = Number(del.dataset.delete);
+          const order = orders.find((x) => x.id === id);
+          if (!order) return;
+          if (
+            !window.confirm(
+              `ნამდვილად წავშალოთ შეკვეთა #${id} — ${order.customer_name || "უსახელო"}?\n\nეს მოქმედება შეუქცევადია.`,
+            )
+          )
+            return;
+          del.disabled = true;
+          const { data, error } = await db
+            .from("Orders")
+            .delete()
+            .eq("id", id)
+            .select("id");
+          del.disabled = false;
+          if (error) {
+            notify(
+              "შეკვეთა ვერ წაიშალა: " +
+                error.message +
+                " (კოდი: " +
+                (error.code || "უცნობი") +
+                ")",
+            );
+            return;
+          }
+          if (!data?.length) {
+            notify(
+              "შეკვეთა არ წაიშალა — Supabase-მა წაშლილი ჩანაწერი არ დააბრუნა. შეამოწმე DELETE პოლიტიკა და SELECT უფლება.",
+            );
+            return;
+          }
+          if (typeof editingId !== "undefined" && editingId === id) closeEdit();
+          await loadOrders();
+          notify(`შეკვეთა #${id} წაშლილია ✓`);
+          return;
+        }
+        if (edit) {
+          const order = orders.find((x) => x.id === Number(edit.dataset.edit));
+          if (order) openEdit(order);
+          return;
+        }
+        if (save) {
+          const id = Number(save.dataset.save),
+            value = $(`orders`).querySelector(
+              `select[data-status="${id}"]`,
+            )?.value;
+          if (!value) return;
+          save.disabled = true;
+          const { error } = await db
+            .from("Orders")
+            .update({ status: value })
+            .eq("id", id);
+          save.disabled = false;
+          if (error) {
+            notify("სტატუსი ვერ შეიცვალა: " + error.message);
+            return;
+          }
+          notify("სტატუსი შენახულია ✓");
+          await loadOrders();
+        }
+        if (copy) {
+          const o = orders.find((x) => x.id === Number(copy.dataset.copy));
+          if (!o) return;
+          const bd = breakdown(o);
+          let itemLines = [];
+          try {
+            const raw =
+              typeof o.items === "string"
+                ? JSON.parse(o.items || "[]")
+                : o.items;
+            if (Array.isArray(raw)) {
+              itemLines = raw
+                .filter(
+                  (x) =>
+                    !(
+                      x &&
+                      typeof x === "object" &&
+                      x.skinsea_admin_breakdown === true
+                    ),
+                )
+                .map((x) =>
+                  typeof x === "string"
+                    ? { name: x, quantity: 1 }
+                    : {
+                        name:
+                          [x.brand, x.name].filter(Boolean).join(" ") ||
+                          "პროდუქტი",
+                        quantity: Number(x.quantity) || 1,
+                      },
+                );
+            }
+          } catch {}
+          if (!itemLines.length)
+            itemLines = [{ name: getItems(o), quantity: 1 }];
+          const details = itemLines
+            .map((x) => `🛍️ პროდუქტი: ${x.name}\n📦 რაოდენობა: ${x.quantity}`)
+            .join("\n\n");
+          const formatted = (v) => Number(v || 0).toFixed(2) + " ₾";
+          const prices = bd
+            ? `💰 პროდუქციის ღირებულება: ${formatted(bd.product)}\n🚚 მიწოდების საფასური: ${formatted(bd.delivery)}\n\n`
+            : "";
+          const txt = `მადლობა, თქვენი შეკვეთა დადასტურებულია! 💙🌊\n\nშეკვეთის დეტალები:\n\n${details}\n\n${prices}💳 *სულ გადასახდელი: ${formatted(o.total)}*\n\n გადახდა ხდება ამანათის მიღებისას, უშუალოდ კურიერთან — ნაღდი ანგარიშსწორებით ან გადარიცხვით.\n\n🚚 მიწოდების სავარაუდო ვადა: 1–3 სამუშაო დღე. \n📞 მიწოდებამდე დაგიკავშირდებათ კურიერი.\n\n `;
+          let copied = false;
+          if (navigator.clipboard && window.isSecureContext) {
+            try {
+              await navigator.clipboard.writeText(txt);
+              copied = true;
+            } catch (err) {
+              console.warn("Clipboard API:", err);
+            }
+          }
+          if (!copied) {
+            const area = document.createElement("textarea");
+            area.value = txt;
+            area.setAttribute("readonly", "");
+            area.style.cssText =
+              "position:fixed;left:12px;top:12px;width:1px;height:1px;opacity:0;z-index:-1";
+            document.body.appendChild(area);
+            area.focus();
+            area.select();
+            area.setSelectionRange(0, area.value.length);
+            try {
+              copied = document.execCommand("copy");
+            } catch (err) {
+              console.warn("Copy fallback:", err);
+            }
+            area.remove();
+          }
+          if (copied)
+            notify(
+              "შეტყობინება დაკოპირებულია ✓ — ჩასვი Messenger-ში ან Instagram-ში",
+            );
+          else {
+            notify(
+              "ავტომატური კოპირება ბრაუზერმა დაბლოკა. მონიშნე და დააკოპირე გახსნილი ტექსტი.",
+            );
+            window.prompt("შეკვეთის ტექსტი — მონიშნე და დააჭირე Ctrl+C:", txt);
+          }
+        }
+      });
+      function editEntries() {
+        return [...$("editProductRows").querySelectorAll(".product-entry")];
+      }
+      function addEditProductRow(product = {}) {
+        const div = document.createElement("div");
+        div.className = "product-entry";
+        div.style.cssText =
+          "display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) 80px auto;gap:8px;align-items:end;margin:9px 0;padding:12px;background:#f5f9f9;border-radius:12px";
+        div.innerHTML = `<div><label>პროდუქტი *</label><input class="item-name" maxlength="250" required /></div><div><label>ერთეულის ფასი ₾ *</label><input class="item-price" type="number" min="0" step="0.01" required /></div><div><label>რაოდენობა *</label><input class="item-qty" type="number" min="1" step="1" required /></div><button type="button" class="outline remove-product" title="წაშლა">✕</button><div class="line-total" style="grid-column:1/-1;text-align:right;font-size:12px;color:#438ba3">ჯამი: 0.00 ₾</div>`;
+        div.querySelector(".item-name").value = product.name || "";
+        div.querySelector(".item-price").value = product.unit_price ?? "";
+        div.querySelector(".item-qty").value = product.quantity || 1;
+        div.querySelector(".remove-product").onclick = () => {
+          if (editEntries().length <= 1) return;
+          div.remove();
+          updateEditTotal();
+        };
+        div
+          .querySelectorAll("input")
+          .forEach((input) => input.addEventListener("input", updateEditTotal));
+        $("editProductRows").appendChild(div);
+        updateEditTotal();
+      }
+      function updateEditTotal() {
+        let cents = 0;
+        for (const div of editEntries()) {
+          const price = Number(div.querySelector(".item-price").value || 0);
+          const qty = Number(div.querySelector(".item-qty").value || 0);
+          const line = Math.round(price * qty * 100);
+          cents += line;
+          div.querySelector(".line-total").textContent =
+            "ჯამი: " + (line / 100).toFixed(2) + " ₾";
+        }
+        const fee = Math.round(Number($("editDeliveryFee").value || 0) * 100);
+        $("editProductTotal").value = (cents / 100).toFixed(2) + " ₾";
+        $("editGrandTotal").value = ((cents + fee) / 100).toFixed(2) + " ₾";
+      }
+      function openEdit(order) {
+        const form = $("editForm");
+        form.elements.order_id.value = order.id;
+        form.elements.customer_name.value = order.customer_name || "";
+        form.elements.phone.value = order.phone || "";
+        form.elements.address.value = order.address || "";
+        form.elements.comment.value = order.comment || "";
+        const bd = breakdown(order);
+        $("editDeliveryFee").value = bd ? bd.delivery : "";
+        $("legacyPriceNote").classList.toggle("hide", !!bd);
+        $("editProductRows").replaceChildren();
+        let items = [];
+        try {
+          const raw =
+            typeof order.items === "string"
+              ? JSON.parse(order.items)
+              : order.items;
+          if (Array.isArray(raw))
+            items = raw.filter(
+              (x) => !(x && typeof x === "object" && x.skinsea_admin_breakdown),
+            );
+        } catch {
+          items = [];
+        }
+        if (!items.length) items = [{ name: getItems(order), quantity: 1 }];
+        for (const item of items) {
+          if (typeof item === "string")
+            addEditProductRow({ name: item, quantity: 1 });
+          else
+            addEditProductRow({
+              name: [item.brand, item.name].filter(Boolean).join(" "),
+              quantity: item.quantity || 1,
+              unit_price: item.unit_price ?? undefined,
+            });
+        }
+        $("editTitle").textContent = "შეკვეთის #" + order.id + " რედაქტირება";
+        $("editSection").classList.remove("hide");
+        updateEditTotal();
+        $("editSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      function closeEdit() {
+        $("editSection").classList.add("hide");
+      }
+      $("closeEdit").onclick = closeEdit;
+      $("cancelEdit").onclick = closeEdit;
+      $("editAddProduct").onclick = () => addEditProductRow();
+      $("editDeliveryFee").addEventListener("input", updateEditTotal);
+      $("editForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const f = e.currentTarget;
+        const id = Number(f.elements.order_id.value);
+        const old = orders.find((x) => x.id === id);
+        if (!old) {
+          notify("შეკვეთა ვერ მოიძებნა. განაახლე გვერდი.");
+          return;
+        }
+        const products = editEntries().map((div) => ({
+          name: div.querySelector(".item-name").value.trim(),
+          unit_price:
+            div.querySelector(".item-price").value === ""
+              ? NaN
+              : Number(div.querySelector(".item-price").value),
+          quantity: Number(div.querySelector(".item-qty").value),
+        }));
+        const deliveryText = $("editDeliveryFee").value;
+        const fee = deliveryText === "" ? NaN : Number(deliveryText);
+        const valid =
+          products.length &&
+          products.every(
+            (p) =>
+              p.name &&
+              Number.isFinite(p.unit_price) &&
+              p.unit_price >= 0 &&
+              Number.isSafeInteger(p.quantity) &&
+              p.quantity >= 1,
+          ) &&
+          Number.isFinite(fee) &&
+          fee >= 0;
+        if (!valid) {
+          notify(
+            "შეავსე თითოეული პროდუქტის ფასი, რაოდენობა და კურიერის თანხა.",
+          );
+          $("editSection").scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+        const cents = products.reduce(
+          (sum, p) => sum + Math.round(p.unit_price * p.quantity * 100),
+          0,
+        );
+        const feeCents = Math.round(fee * 100);
+        const update = {
+          customer_name: f.elements.customer_name.value.trim(),
+          phone: f.elements.phone.value.trim(),
+          address: f.elements.address.value.trim(),
+          comment: f.elements.comment.value.trim(),
+          items: JSON.stringify([
+            ...products,
+            {
+              skinsea_admin_breakdown: true,
+              product_total: cents / 100,
+              delivery_fee: feeCents / 100,
+            },
+          ]),
+          total: (cents + feeCents) / 100,
+        };
+        if (
+          !update.customer_name ||
+          !update.phone ||
+          !update.address ||
+          !Number.isFinite(update.total)
+        ) {
+          notify("შეავსე სავალდებულო ველები.");
+          return;
+        }
+        $("editSaveBtn").disabled = true;
+        const { error } = await db
+          .from("Orders")
+          .update(update)
+          .eq("id", id)
+          .select("id");
+        $("editSaveBtn").disabled = false;
+        if (error) {
+          notify("ცვლილებები ვერ შეინახა: " + error.message);
+          return;
+        }
+        closeEdit();
+        await loadOrders();
+        notify("შეკვეთა #" + id + " განახლებულია ✓");
+      });
+      $("orderForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const f = new FormData(form);
+        const name = String(f.get("customer_name") || "").trim(),
+          phone = String(f.get("phone") || "").trim(),
+          address = String(f.get("address") || "").trim(),
+          products = collectProducts(),
+          deliveryFee = Number(f.get("delivery_fee"));
+        const validProducts =
+          products.length > 0 &&
+          products.every(
+            (p) =>
+              p.name &&
+              Number.isFinite(p.unit_price) &&
+              p.unit_price >= 0 &&
+              Number.isSafeInteger(p.quantity) &&
+              p.quantity >= 1,
+          );
+        const productCents = products.reduce(
+          (sum, p) => sum + Math.round(p.unit_price * p.quantity * 100),
+          0,
+        );
+        const feeCents = Math.round(deliveryFee * 100);
+        const total = (productCents + feeCents) / 100;
+        if (
+          !name ||
+          !phone ||
+          !address ||
+          !validProducts ||
+          !Number.isFinite(deliveryFee) ||
+          deliveryFee < 0 ||
+          !Number.isFinite(total)
+        ) {
+          notify("შეავსე პროდუქტის დასახელება, ფასი და რაოდენობა სწორად.");
+          return;
+        }
+        const row = {
+          customer_name: name,
+          phone,
+          address,
+          items: JSON.stringify([
+            ...products,
+            {
+              skinsea_admin_breakdown: true,
+              product_total: productCents / 100,
+              delivery_fee: feeCents / 100,
+            },
+          ]),
+          total,
+          comment: String(f.get("comment") || "").trim(),
+          status: "processing",
+        };
+        $("saveBtn").disabled = true;
+        const { error } = await db.from("Orders").insert(row);
+        $("saveBtn").disabled = false;
+        if (error) {
+          notify("შეკვეთა ვერ შეინახა: " + error.message);
+          return;
+        }
+        form.reset();
+        $("productRows").replaceChildren();
+        addProductRow();
+        updateGrandTotal();
+        $("newSection").classList.add("hide");
+        await loadOrders();
+        notify("შეკვეთა შენახულია ✓ (მარაგი არ შეცვლილა)");
+      });
+      checkAuth();
+    </script>
+  </body>
+</html>
