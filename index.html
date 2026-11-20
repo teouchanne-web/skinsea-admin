@@ -791,7 +791,24 @@
       }
       $("search").oninput = render;
       $("filter").onchange = render;
-      $("refresh").onclick = loadOrders;
+      $("refresh").onclick = async () => {
+        const button = $("refresh");
+        if (button.disabled) return;
+        button.disabled = true;
+        button.textContent = "⏳ იტვირთება...";
+        try {
+          await loadOrders();
+          if (!$("notice").textContent.trim())
+            notify("✅ შეკვეთები განახლებულია.");
+        } catch (error) {
+          notify(
+            "განახლება ვერ მოხერხდა: " + (error?.message || String(error)),
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "🔄 განახლება";
+        }
+      };
       $("toggleNew").onclick = () => {
         $("newSection").classList.toggle("hide");
       };
