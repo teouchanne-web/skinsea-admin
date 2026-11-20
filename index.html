@@ -218,6 +218,36 @@
         flex-wrap: wrap;
         margin-top: 13px;
       }
+      /* სტატუსის არჩევის ველის ფერები */
+      .actions select.status-select {
+        font-weight: 700;
+        border-width: 1px;
+      }
+      .actions select.status-select.processing {
+        background: #fff3d7;
+        color: #8c6619;
+        border-color: #f1dca3;
+      }
+      .actions select.status-select.confirmed {
+        background: #e4f4fc;
+        color: #226d99;
+        border-color: #b9dff3;
+      }
+      .actions select.status-select.shipped {
+        background: #f0e9ff;
+        color: #7045a5;
+        border-color: #d9c8f8;
+      }
+      .actions select.status-select.delivered {
+        background: #e6f5e9;
+        color: #31714c;
+        border-color: #b9dfc3;
+      }
+      .actions select.status-select.cancelled {
+        background: #fde8e8;
+        color: #a34141;
+        border-color: #f3c4c4;
+      }
       .actions select {
         width: auto;
         min-width: 150px;
@@ -754,7 +784,7 @@
                 const priceHtml = bd
                   ? `<br><b>პროდუქცია:</b> ${safe(money(bd.product))}<br><b>კურიერი:</b> ${safe(money(bd.delivery))}`
                   : `<br><span class="muted">პროდუქციისა და კურიერის თანხები ცალ-ცალკე არ არის შენახული</span>`;
-                return `<article class="order"><div class="row"><h3>#${safe(o.id)} · ${safe(o.customer_name || "უსახელო")}</h3><span class="pill ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : ""}">${safe(statusLabels[st] || st)}</span></div><p class="muted">${safe(date)}</p><p><b>ტელ:</b> ${safe(o.phone || "—")}<br><b>მისამართი:</b> ${safe(o.address || "—")}<br><b>პროდუქტები:</b> ${safe(getItems(o))}${priceHtml}<br><b>სულ გადასახდელი:</b> ${safe(money(o.total))}${o.comment ? "<br><b>შენიშვნა:</b> " + safe(o.comment) : ""}</p><div class="actions"><select aria-label="შეკვეთის სტატუსი" data-status="${o.id}">${opts}</select><button data-save="${o.id}" class="secondary">💾 სტატუსის შენახვა</button><button data-edit="${o.id}" class="outline">✏️ რედაქტირება</button><button data-delete="${o.id}" class="outline" style="color:#a34141;border-color:#f0cccc">🗑️ წაშლა</button><button data-copy="${o.id}" class="outline">📋 ტექსტის კოპირება</button></div></article>`;
+                return `<article class="order"><div class="row"><h3>#${safe(o.id)} · ${safe(o.customer_name || "უსახელო")}</h3><span class="pill ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : ""}">${safe(statusLabels[st] || st)}</span></div><p class="muted">${safe(date)}</p><p><b>ტელ:</b> ${safe(o.phone || "—")}<br><b>მისამართი:</b> ${safe(o.address || "—")}<br><b>პროდუქტები:</b> ${safe(getItems(o))}${priceHtml}<br><b>სულ გადასახდელი:</b> ${safe(money(o.total))}${o.comment ? "<br><b>შენიშვნა:</b> " + safe(o.comment) : ""}</p><div class="actions"><select class="status-select ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : "processing"}" aria-label="შეკვეთის სტატუსი" data-status="${o.id}">${opts}</select><button data-save="${o.id}" class="secondary">💾 სტატუსის შენახვა</button><button data-edit="${o.id}" class="outline">✏️ რედაქტირება</button><button data-delete="${o.id}" class="outline" style="color:#a34141;border-color:#f0cccc">🗑️ წაშლა</button><button data-copy="${o.id}" class="outline">📋 ტექსტის კოპირება</button></div></article>`;
               })
               .join("")
           : '<div class="empty">შეკვეთები ვერ მოიძებნა.</div>';
@@ -766,6 +796,20 @@
         $("newSection").classList.toggle("hide");
       };
       $("closeNew").onclick = () => $("newSection").classList.add("hide");
+      // სტატუსის არჩევისას ფერი მაშინვე იცვლება; მონაცემი ინახება მხოლოდ შენახვის ღილაკით.
+      $("orders").addEventListener("change", (e) => {
+        const select = e.target.closest("select[data-status]");
+        if (!select) return;
+        select.classList.remove(
+          "processing",
+          "confirmed",
+          "shipped",
+          "delivered",
+          "cancelled",
+        );
+        if (Object.hasOwn(statusLabels, select.value))
+          select.classList.add(select.value);
+      });
       $("orders").addEventListener("click", async (e) => {
         const save = e.target.closest("[data-save]"),
           copy = e.target.closest("[data-copy]"),
