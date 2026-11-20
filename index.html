@@ -784,7 +784,7 @@
                 const priceHtml = bd
                   ? `<br><b>პროდუქცია:</b> ${safe(money(bd.product))}<br><b>კურიერი:</b> ${safe(money(bd.delivery))}`
                   : `<br><span class="muted">პროდუქციისა და კურიერის თანხები ცალ-ცალკე არ არის შენახული</span>`;
-                return `<article class="order"><div class="row"><h3>#${safe(o.id)} · ${safe(o.customer_name || "უსახელო")}</h3><span class="pill ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : ""}">${safe(statusLabels[st] || st)}</span></div><p class="muted">${safe(date)}</p><p><b>ტელ:</b> ${safe(o.phone || "—")}<br><b>მისამართი:</b> ${safe(o.address || "—")}<br><b>პროდუქტები:</b> ${safe(getItems(o))}${priceHtml}<br><b>სულ გადასახდელი:</b> ${safe(money(o.total))}${o.comment ? "<br><b>შენიშვნა:</b> " + safe(o.comment) : ""}</p><div class="actions"><select class="status-select ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : "processing"}" aria-label="შეკვეთის სტატუსი" data-status="${o.id}">${opts}</select><button data-save="${o.id}" class="secondary">💾 სტატუსის შენახვა</button><button data-edit="${o.id}" class="outline">✏️ რედაქტირება</button><button data-delete="${o.id}" class="outline" style="color:#a34141;border-color:#f0cccc">🗑️ წაშლა</button><button data-copy="${o.id}" class="outline">📋 ტექსტის კოპირება</button></div></article>`;
+                return `<article class="order"><div class="row"><h3>#${safe(o.id)} · ${safe(o.customer_name || "უსახელო")}</h3><span class="pill ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : ""}">${safe(statusLabels[st] || st)}</span></div><p class="muted">${safe(date)}</p><p><b>ტელ:</b> ${safe(o.phone || "—")}<br><b>მისამართი:</b> ${safe(o.address || "—")}<br><b>პროდუქტები:</b> ${safe(getItems(o))}${priceHtml}<br><strong style="font-weight:800;color:#243c45;font-size:15px">სულ გადასახდელი: ${safe(money(o.total))}</strong>${o.comment ? "<br><b>შენიშვნა:</b> " + safe(o.comment) : ""}</p><div class="actions"><select class="status-select ${["processing", "confirmed", "shipped", "delivered", "cancelled"].includes(st) ? st : "processing"}" aria-label="შეკვეთის სტატუსი" data-status="${o.id}">${opts}</select><button data-save="${o.id}" class="secondary">💾 სტატუსის შენახვა</button><button data-edit="${o.id}" class="outline">✏️ რედაქტირება</button><button data-delete="${o.id}" class="outline" style="color:#a34141;border-color:#f0cccc">🗑️ წაშლა</button><button data-copy="${o.id}" class="outline">📋 ტექსტის კოპირება</button></div></article>`;
               })
               .join("")
           : '<div class="empty">შეკვეთები ვერ მოიძებნა.</div>';
@@ -935,14 +935,35 @@
           const prices = bd
             ? `💰 პროდუქციის ღირებულება: ${formatted(bd.product)}\n🚚 მიწოდების საფასური: ${formatted(bd.delivery)}\n\n`
             : "";
-          const txt = `მადლობა, თქვენი შეკვეთა დადასტურებულია! 💙🌊\n\nშეკვეთის დეტალები:\n\n${details}\n\n${prices}💳 *სულ გადასახდელი: ${formatted(o.total)}*\n\n გადახდა ხდება ამანათის მიღებისას, უშუალოდ კურიერთან — ნაღდი ანგარიშსწორებით ან გადარიცხვით.\n\n🚚 მიწოდების სავარაუდო ვადა: 1–3 სამუშაო დღე. \n📞 მიწოდებამდე დაგიკავშირდებათ კურიერი.\n\n `;
+          const txt = `მადლობა, თქვენი შეკვეთა დადასტურებულია! 💙🌊\n\nშეკვეთის დეტალები:\n\n${details}\n\n${prices}💳 სულ გადასახდელი: ${formatted(o.total)}\n\nგადახდა ხდება ამანათის მიღებისას, უშუალოდ კურიერთან — ნაღდი ანგარიშსწორებით ან გადარიცხვით.\n\n🚚 მიწოდების სავარაუდო ვადა: 1–3 სამუშაო დღე.\n📞 მიწოდებამდე დაგიკავშირდებათ კურიერი.`;
+          // Rich clipboard: browsers/apps that support HTML paste can retain bold.
+          // Messenger may strip HTML formatting; plain text is provided as fallback.
+          const totalLine = `💳 სულ გადასახდელი: ${formatted(o.total)}`;
+          const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+          })[ch]);
+          const html = txt.split(totalLine).map((part) => escapeHtml(part).replace(/\n/g, "<br>"))
+            .join(`<strong style="font-weight:700">${escapeHtml(totalLine)}</strong>`);
           let copied = false;
           if (navigator.clipboard && window.isSecureContext) {
-            try {
-              await navigator.clipboard.writeText(txt);
-              copied = true;
-            } catch (err) {
-              console.warn("Clipboard API:", err);
+            if (navigator.clipboard.write && window.ClipboardItem) {
+              try {
+                await navigator.clipboard.write([new ClipboardItem({
+                  "text/html": new Blob([html], { type: "text/html" }),
+                  "text/plain": new Blob([txt], { type: "text/plain" })
+                })]);
+                copied = true;
+              } catch (err) {
+                console.warn("Rich clipboard unavailable:", err);
+              }
+            }
+            if (!copied && navigator.clipboard.writeText) {
+              try {
+                await navigator.clipboard.writeText(txt);
+                copied = true;
+              } catch (err) {
+                console.warn("Plain clipboard unavailable:", err);
+              }
             }
           }
           if (!copied) {
